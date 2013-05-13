@@ -9,8 +9,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.loaders.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.loaders.TmxMapLoader.Parameters;
+import com.badlogic.gdx.maps.tiled.loaders.TmxImageMapLoader;
+import com.badlogic.gdx.maps.tiled.loaders.TmxImageMapLoader.Parameters;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.tests.utils.GdxTest;
 import com.badlogic.gdx.tests.utils.OrthoCamController;
@@ -39,11 +39,11 @@ public class TiledMapDirectLoaderTest extends GdxTest {
 		font = new BitmapFont();
 		batch = new SpriteBatch();
 
-		TmxMapLoader.Parameters params = new TmxMapLoader.Parameters();
+		TmxImageMapLoader.Parameters params = new TmxImageMapLoader.Parameters();
 		params.textureMinFilter = TextureFilter.Linear;
 		params.textureMagFilter = TextureFilter.Linear;
 
-		map = new TmxMapLoader().load("data/maps/tiled/super-koalio/level1.tmx", params);
+		map = new TmxImageMapLoader().load("data/maps/tiled/super-koalio/level1.tmx", params);
 // map = new TmxMapLoader().load("data/maps/tiled/super-koalio/level1.tmx");
 		renderer = new OrthogonalTiledMapRenderer(map, 1f / 32f);
 	}

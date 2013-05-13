@@ -14,7 +14,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
-import com.badlogic.gdx.maps.tiled.loaders.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.loaders.TmxImageMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
@@ -93,7 +93,7 @@ public class SuperKoalio extends GdxTest {
 		Koala.HEIGHT = 1 / 16f * regions[0].getRegionHeight();
 		
 		// load the map, set the unit scale to 1/16 (1 unit == 16 pixels)
-		map = new TmxMapLoader().load("data/maps/tiled/super-koalio/level1.tmx");
+		map = new TmxImageMapLoader().load("data/maps/tiled/super-koalio/level1.tmx");
 		renderer = new OrthogonalTiledMapRenderer(map, 1 / 16f);
 		
 		// create an orthographic camera, shows us 30x20 units of the world

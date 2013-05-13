@@ -21,7 +21,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.XmlReader.Element;
 
-public class TmxAtlasMapLoader extends BaseTmxMapLoader<TiledMap, TmxAtlasMapLoader.Parameters> {
+public class TmxAtlasMapLoader extends TmxMapLoader<TiledMap, TmxAtlasMapLoader.Parameters> {
 
 	public static class Parameters extends AssetLoaderParameters<TiledMap> {
 		/** Whether to load the map for a y-up coordinate system */
@@ -78,7 +78,7 @@ public class TmxAtlasMapLoader extends BaseTmxMapLoader<TiledMap, TmxAtlasMapLoa
 	}
 
 	@Override
-	public Array<AssetDescriptor> requestDependencies (FileHandle mapFile, Element root, Parameters parameters) {
+	public Array<AssetDescriptor> requestDependencies (FileHandle mapFile, Parameters parameters) {
 		Array<AssetDescriptor> dependencies = new Array<AssetDescriptor>();
 		Element properties = root.getChildByName("properties");
 		if (properties != null) {
@@ -86,7 +86,7 @@ public class TmxAtlasMapLoader extends BaseTmxMapLoader<TiledMap, TmxAtlasMapLoa
 				String name = property.getAttribute("name");
 				String value = property.getAttribute("value");
 				if (name.startsWith("atlas")) {
-					FileHandle atlasHandle = getRelativeFileHandle(mapFile, value);
+					FileHandle atlasHandle = mapFile.relative(value);
 					atlasHandle = resolve(atlasHandle.path());
 					dependencies.add(new AssetDescriptor(atlasHandle.path(), TextureAtlas.class));
 				}
@@ -99,7 +99,7 @@ public class TmxAtlasMapLoader extends BaseTmxMapLoader<TiledMap, TmxAtlasMapLoa
 	}
 
 	@Override
-	public Array<? extends Object> requestResources (FileHandle mapFile, Element root, Parameters parameters) {
+	public Array<? extends Object> requestResources (FileHandle mapFile, Parameters parameters) {
 		FileHandle atlasFile = null;
 
 		try {
@@ -129,7 +129,7 @@ public class TmxAtlasMapLoader extends BaseTmxMapLoader<TiledMap, TmxAtlasMapLoa
 		TextureAtlas atlas = null;
 		String regionsName = "";
 		if (map.getProperties().containsKey("atlas")) {
-			FileHandle atlasHandle = getRelativeFileHandle(mapFile, map.getProperties().get("atlas", String.class));
+			FileHandle atlasHandle = mapFile.relative(map.getProperties().get("atlas", String.class));
 			atlasHandle = resolve(atlasHandle.path());
 			atlas = resolver.getAtlas(atlasHandle.path());
 			regionsName = atlasHandle.nameWithoutExtension();
@@ -184,7 +184,7 @@ public class TmxAtlasMapLoader extends BaseTmxMapLoader<TiledMap, TmxAtlasMapLoa
 						continue;
 					}
 
-					return getRelativeFileHandle(mapFile, value);
+					return mapFile.relative(value);
 				}
 			}
 		}

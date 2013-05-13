@@ -12,7 +12,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.loaders.TmxAtlasMapLoader;
-import com.badlogic.gdx.maps.tiled.loaders.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.loaders.TmxImageMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.IsometricTiledMapRenderer;
 import com.badlogic.gdx.tests.utils.GdxTest;
 import com.badlogic.gdx.tests.utils.OrthoCamController;
@@ -43,12 +43,12 @@ public class TiledMapAssetManagerTest extends GdxTest {
 		font = new BitmapFont();
 		batch = new SpriteBatch();
 
-		TmxMapLoader.Parameters params = new TmxMapLoader.Parameters();
+		TmxImageMapLoader.Parameters params = new TmxImageMapLoader.Parameters();
 		params.textureMinFilter = TextureFilter.Linear;
 		params.textureMagFilter = TextureFilter.Linear;
 
 		assetManager = new AssetManager();
-		assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
+		assetManager.setLoader(TiledMap.class, new TmxImageMapLoader(new InternalFileHandleResolver()));
 		assetManager.load("data/maps/tiled/isometric_grass_and_water.tmx", TiledMap.class, params);
 // assetManager.load("data/maps/tiled/isometric_grass_and_water.tmx", TiledMap.class);
 		assetManager.finishLoading();

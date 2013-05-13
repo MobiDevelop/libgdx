@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.ImageResolver;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.ImageResolver.AssetManagerImageResolver;
 import com.badlogic.gdx.maps.ImageResolver.DirectImageResolver;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -33,7 +34,7 @@ import com.badlogic.gdx.utils.XmlReader.Element;
 /** Implements the Tide format base loader.
  * 
  * @author bmanuel */
-public class TideMapLoader extends BaseTiledMapLoader<TiledMap, TideMapLoader.Parameters> implements ConcreteMapLoader<TiledMap> {
+public class TideMapLoader extends XmlTiledMapLoader<TiledMap, TideMapLoader.Parameters> implements ConcreteTiledMapLoader<TiledMap> {
 
 	public static class Parameters extends AssetLoaderParameters<TiledMap> {
 		/** Whether to load the map for a y-up coordinate system */
@@ -68,7 +69,7 @@ public class TideMapLoader extends BaseTiledMapLoader<TiledMap, TideMapLoader.Pa
 	 * @param mapFile the Filehandle of the tmx file
 	 * @return the {@link TiledMap} */
 	@Override
-	public TiledMap loadTilemap (Element root, FileHandle mapFile) {
+	public TiledMap loadMap (FileHandle mapFile) {
 		TiledMap map = createTiledMap();
 
 		Element properties = root.getChildByName("properties");
@@ -109,7 +110,7 @@ public class TideMapLoader extends BaseTiledMapLoader<TiledMap, TideMapLoader.Pa
 	}
 
 	@Override
-	public Array<? extends Object> requestResources (FileHandle mapFile, Element root, Parameters parameters) {
+	public Array<? extends Object> requestResources (FileHandle mapFile, Parameters parameters) {
 		try {
 			for (FileHandle textureFile : loadTileSheets(root, mapFile)) {
 				Texture texture = new Texture(textureFile, parameters.generateMipMaps);
@@ -124,7 +125,7 @@ public class TideMapLoader extends BaseTiledMapLoader<TiledMap, TideMapLoader.Pa
 	}
 
 	@Override
-	public Array<AssetDescriptor> requestDependencies (FileHandle mapFile, Element root, Parameters parameters) {
+	public Array<AssetDescriptor> requestDependencies (FileHandle mapFile, Parameters parameters) {
 		Array<AssetDescriptor> dependencies = new Array<AssetDescriptor>();
 
 		boolean generateMipMaps = (parameters != null ? parameters.generateMipMaps : false);
@@ -197,7 +198,7 @@ public class TideMapLoader extends BaseTiledMapLoader<TiledMap, TideMapLoader.Pa
 		Element tilesheets = root.getChildByName("TileSheets");
 		for (Element tileset : tilesheets.getChildrenByName("TileSheet")) {
 			Element imageSource = tileset.getChildByName("ImageSource");
-			FileHandle image = getRelativeFileHandle(mapFile, imageSource.getText());
+			FileHandle image = mapFile.relative(imageSource.getText());
 			images.add(image);
 		}
 		return images;
@@ -231,7 +232,7 @@ public class TideMapLoader extends BaseTiledMapLoader<TiledMap, TideMapLoader.Pa
 			int spacingX = Integer.parseInt(spacingParts[0]);
 			int spacingY = Integer.parseInt(spacingParts[1]);
 
-			FileHandle image = getRelativeFileHandle(mapFile, imageSource);
+			FileHandle image = mapFile.relative(imageSource);
 
 			// TODO: Actually load the tilesheet
 			// Need to make global ids as Tide doesn't have global ids.
@@ -327,4 +328,18 @@ public class TideMapLoader extends BaseTiledMapLoader<TiledMap, TideMapLoader.Pa
 			map.getLayers().add(layer);
 		}
 	}
+	
+	protected void loadProperties (MapProperties properties, Element element) {
+		if (element.getName().equals("properties")) {
+			for (Element property : element.getChildrenByName("property")) {
+				String name = property.getAttribute("name", null);
+				String value = property.getAttribute("value", null);
+				if (value == null) {
+					value = property.getText();
+				}
+				properties.put(name, value);
+			}
+		}
+	}
+	
 }

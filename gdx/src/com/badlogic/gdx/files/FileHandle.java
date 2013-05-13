@@ -34,6 +34,7 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.util.StringTokenizer;
 
 /** Represents a file or directory on the filesystem, classpath, Android SD card, or Android assets directory. FileHandles are
  * created via a {@link Files} instance.
@@ -493,6 +494,20 @@ public class FileHandle {
 		return new FileHandle(parent, type);
 	}
 
+	public FileHandle relative (String path) {
+		StringTokenizer tokenizer = new StringTokenizer(path, "\\/");
+		FileHandle result = parent();
+		while (tokenizer.hasMoreElements()) {
+			String token = tokenizer.nextToken();
+			if (token.equals(".."))
+				result = result.parent();
+			else {
+				result = result.child(token);
+			}
+		}
+		return result;		
+	}
+	
 	/** @throws GdxRuntimeException if this file handle is a {@link FileType#Classpath} or {@link FileType#Internal} file. */
 	public void mkdirs () {
 		if (type == FileType.Classpath) throw new GdxRuntimeException("Cannot mkdirs with a classpath file: " + file);
