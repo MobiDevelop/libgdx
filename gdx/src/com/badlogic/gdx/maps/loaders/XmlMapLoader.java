@@ -23,6 +23,7 @@ public abstract class XmlMapLoader<M extends Map, P extends AssetLoaderParameter
 	
 	public XmlMapLoader (FileHandleResolver resolver) {
 		super(resolver);
+		reader = new XmlReader();
 	}
 
 	/** Implements the synchronous, direct-loading mechanism of loading a map.
@@ -44,7 +45,7 @@ public abstract class XmlMapLoader<M extends Map, P extends AssetLoaderParameter
 
 			return map;
 		} catch (IOException e) {
-			throw new GdxRuntimeException("Couldn't load tilemap '" + fileName + "'", e);
+			throw new GdxRuntimeException("Couldn't load map '" + fileName + "'", e);
 		}
 	}
 
@@ -59,7 +60,7 @@ public abstract class XmlMapLoader<M extends Map, P extends AssetLoaderParameter
 		try {
 			map = loadMap(mapFile);
 		} catch (Exception e) {
-			throw new GdxRuntimeException("Couldn't load tilemap '" + fileName + "'", e);
+			throw new GdxRuntimeException("Couldn't load map '" + fileName + "'", e);
 		}
 	}
 

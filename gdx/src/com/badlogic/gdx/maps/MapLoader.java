@@ -23,7 +23,6 @@ public interface MapLoader<M extends Map, P extends AssetLoaderParameters<M>> {
 	 * for the specified map to be loaded.
 	 * 
 	 * @param mapFile the requested map file to load
-	 * @param root the root document of the map, can be used to traverse the map definition and detect dependencies
 	 * @param parameters the requested loader configuration
 	 * @return the Disposable resources allocated by the loader */
 	public abstract Array<? extends Object> requestResources (FileHandle mapFile, P parameters);
@@ -32,7 +31,6 @@ public interface MapLoader<M extends Map, P extends AssetLoaderParameters<M>> {
 	 * loading the specified map file: the loader can return <b>null</b> to signal that there are no dependencies.
 	 * 
 	 * @param mapFile the requested map file to load
-	 * @param root the root document of the map, can be used to traverse the map definition and detect dependencies
 	 * @param parameters the requested loader configuration
 	 * @return other assets that this asset depends on, and thus need to be loaded first, or null if there are no dependencies */
 	public abstract Array<AssetDescriptor> requestDependencies (FileHandle mapFile, P parameters);
@@ -40,7 +38,6 @@ public interface MapLoader<M extends Map, P extends AssetLoaderParameters<M>> {
 	/** Request the loader to concretely load the specified map, given the root element and the map file: traversing the passed
 	 * document should be the preferred method, but a loader is free to implement whatever method is preferred.
 	 * 
-	 * @param root The root document of the map
 	 * @param mapFile the FileHandle to the specified map file
 	 * @return a Map instance */
 	public abstract M loadMap (FileHandle mapFile);

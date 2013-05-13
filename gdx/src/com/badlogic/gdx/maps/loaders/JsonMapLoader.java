@@ -25,6 +25,7 @@ public abstract class JsonMapLoader<M extends Map, P extends AssetLoaderParamete
 	
 	public JsonMapLoader (FileHandleResolver resolver) {
 		super(resolver);
+		reader = new JsonReader();
 	}
 
 	/** Implements the synchronous, direct-loading mechanism of loading a map.
@@ -57,7 +58,7 @@ public abstract class JsonMapLoader<M extends Map, P extends AssetLoaderParamete
 		try {
 			map = loadMap(mapFile);
 		} catch (Exception e) {
-			throw new GdxRuntimeException("Couldn't load tilemap '" + fileName + "'", e);
+			throw new GdxRuntimeException("Couldn't load map '" + fileName + "'", e);
 		}
 	}
 
