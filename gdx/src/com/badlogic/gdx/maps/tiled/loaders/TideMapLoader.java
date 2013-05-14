@@ -18,6 +18,7 @@ import com.badlogic.gdx.maps.ImageResolver;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.ImageResolver.AssetManagerImageResolver;
 import com.badlogic.gdx.maps.ImageResolver.DirectImageResolver;
+import com.badlogic.gdx.maps.loaders.XmlMapLoader;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -34,7 +35,7 @@ import com.badlogic.gdx.utils.XmlReader.Element;
 /** Implements the Tide format base loader.
  * 
  * @author bmanuel */
-public class TideMapLoader extends XmlTiledMapLoader<TiledMap, TideMapLoader.Parameters> implements ConcreteTiledMapLoader<TiledMap> {
+public class TideMapLoader extends XmlMapLoader<TiledMap, TideMapLoader.Parameters> implements BaseTiledMapLoader<TiledMap> {
 
 	public static class Parameters extends AssetLoaderParameters<TiledMap> {
 		/** Whether to load the map for a y-up coordinate system */
@@ -70,7 +71,7 @@ public class TideMapLoader extends XmlTiledMapLoader<TiledMap, TideMapLoader.Par
 	 * @return the {@link TiledMap} */
 	@Override
 	public TiledMap loadMap (FileHandle mapFile) {
-		TiledMap map = createTiledMap();
+		TiledMap map = createMap();
 
 		Element properties = root.getChildByName("properties");
 		if (properties != null) {
@@ -95,7 +96,7 @@ public class TideMapLoader extends XmlTiledMapLoader<TiledMap, TideMapLoader.Par
 	}
 
 	@Override
-	public TiledMap createTiledMap () {
+	public TiledMap createMap () {
 		return new TiledMap();
 	}
 
@@ -148,7 +149,7 @@ public class TideMapLoader extends XmlTiledMapLoader<TiledMap, TideMapLoader.Par
 	}
 
 	@Override
-	public void populateWithTiles (TiledMapTileSet tileset, TiledMap map, FileHandle mapFile, FileHandle tilesetImage) {
+	public void loadTiles (TiledMapTileSet tileset, TiledMap map, FileHandle mapFile, FileHandle tilesetImage) {
 		int tilewidth = tileset.getProperties().get("tilewidth", Integer.class);
 		int tileheight = tileset.getProperties().get("tileheight", Integer.class);
 		int spacingX = tileset.getProperties().get("spacingX", Integer.class);
@@ -253,7 +254,7 @@ public class TideMapLoader extends XmlTiledMapLoader<TiledMap, TideMapLoader.Par
 			tileset.getProperties().put("marginY", marginY);
 			int gid = firstgid;
 
-			populateWithTiles(tileset, map, mapFile, image);
+			loadTiles(tileset, map, mapFile, image);
 
 			Element properties = element.getChildByName("Properties");
 			if (properties != null) {

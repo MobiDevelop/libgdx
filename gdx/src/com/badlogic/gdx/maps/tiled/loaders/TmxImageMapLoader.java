@@ -66,7 +66,7 @@ public class TmxImageMapLoader extends TmxMapLoader<TiledMap, TmxImageMapLoader.
 	}
 
 	@Override
-	public TiledMap createTiledMap () {
+	public TiledMap createMap () {
 		return new TiledMap();
 	}
 
@@ -119,7 +119,7 @@ public class TmxImageMapLoader extends TmxMapLoader<TiledMap, TmxImageMapLoader.
 	}
 
 	@Override
-	public void populateWithTiles (TiledMapTileSet tileset, TiledMap map, FileHandle mapFile, FileHandle tilesetImage) {
+	public void loadTiles (TiledMapTileSet tileset, TiledMap map, FileHandle mapFile, FileHandle tilesetImage) {
 		int tilewidth = tileset.getProperties().get("tilewidth", Integer.class);
 		int tileheight = tileset.getProperties().get("tileheight", Integer.class);
 		int spacing = tileset.getProperties().get("spacing", Integer.class);

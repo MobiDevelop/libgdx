@@ -24,7 +24,7 @@ public interface MapLoader<M extends Map, P extends AssetLoaderParameters<M>> {
 	 * 
 	 * @param mapFile the requested map file to load
 	 * @param parameters the requested loader configuration
-	 * @return the Disposable resources allocated by the loader */
+	 * @return the resources allocated by the loader */
 	public abstract Array<? extends Object> requestResources (FileHandle mapFile, P parameters);
 
 	/** Called only when an <b>asynchronous</b> loading is requested, let the loader to report back of any asset it depends on for
@@ -52,5 +52,8 @@ public interface MapLoader<M extends Map, P extends AssetLoaderParameters<M>> {
 	 * 
 	 * @return a new instance of the loader default parameters */
 	public abstract P createDefaultParameters ();
+
+	public abstract M createMap();
 	
+	public abstract boolean isYUp();
 }

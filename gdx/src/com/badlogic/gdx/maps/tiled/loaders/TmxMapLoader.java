@@ -15,6 +15,7 @@ import com.badlogic.gdx.maps.ImageResolver;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapProperties;
+import com.badlogic.gdx.maps.loaders.XmlMapLoader;
 import com.badlogic.gdx.maps.objects.EllipseMapObject;
 import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.maps.objects.PolylineMapObject;
@@ -35,8 +36,7 @@ import com.badlogic.gdx.utils.XmlReader.Element;
 /** Implements the TMX format base loader.
  * 
  * @author bmanuel */
-public abstract class TmxMapLoader<T extends TiledMap, P extends AssetLoaderParameters<T>> extends XmlTiledMapLoader<T, P>
-	implements ConcreteTiledMapLoader<T> {
+public abstract class TmxMapLoader<T extends TiledMap, P extends AssetLoaderParameters<T>> extends XmlMapLoader<T, P> implements BaseTiledMapLoader<T> {
 
 	// tmx-specific constants
 	protected static final int FLAG_FLIP_HORIZONTALLY = 0x80000000;
@@ -44,6 +44,9 @@ public abstract class TmxMapLoader<T extends TiledMap, P extends AssetLoaderPara
 	protected static final int FLAG_FLIP_DIAGONALLY = 0x20000000;
 	protected static final int MASK_CLEAR = 0xE0000000;
 
+	protected int mapWidthInPixels;
+	protected int mapHeightInPixels;
+	
 	public TmxMapLoader () {
 		super(new InternalFileHandleResolver());
 	}
@@ -58,7 +61,7 @@ public abstract class TmxMapLoader<T extends TiledMap, P extends AssetLoaderPara
 	 * @return the {@link TiledMap} */
 	@Override
 	public T loadMap (FileHandle mapFile) {
-		T map = createTiledMap();
+		T map = createMap();
 
 		String mapOrientation = root.getAttribute("orientation", null);
 		int mapWidth = root.getIntAttribute("width", 0);
@@ -176,7 +179,7 @@ public abstract class TmxMapLoader<T extends TiledMap, P extends AssetLoaderPara
 			props.put("margin", margin);
 			props.put("spacing", spacing);
 
-			populateWithTiles(tileset, map, mapFile, image);
+			loadTiles(tileset, map, mapFile, image);
 
 			Array<Element> tileElements = element.getChildrenByName("tile");
 
@@ -467,4 +470,7 @@ public abstract class TmxMapLoader<T extends TiledMap, P extends AssetLoaderPara
 		return cell;
 	}
 
+	protected static int unsignedByteToInt (byte b) {
+		return (int)b & 0xFF;
+	}
 }

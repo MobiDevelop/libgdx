@@ -57,7 +57,7 @@ public class TmxAtlasMapLoader extends TmxMapLoader<TiledMap, TmxAtlasMapLoader.
 	}
 
 	@Override
-	public TiledMap createTiledMap () {
+	public TiledMap createMap () {
 		return new TiledMap();
 	}
 
@@ -115,7 +115,7 @@ public class TmxAtlasMapLoader extends TmxMapLoader<TiledMap, TmxAtlasMapLoader.
 	}
 
 	@Override
-	public void populateWithTiles (TiledMapTileSet tileset, TiledMap map, FileHandle mapFile, FileHandle tilesetImage) {
+	public void loadTiles (TiledMapTileSet tileset, TiledMap map, FileHandle mapFile, FileHandle tilesetImage) {
 		int firstgid = tileset.getProperties().get("firstgid", Integer.class);
 
 		if (assetManager == null) {
