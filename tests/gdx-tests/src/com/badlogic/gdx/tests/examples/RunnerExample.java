@@ -103,7 +103,7 @@ public class RunnerExample extends GdxTest {
 	}
 	
 	public void generateStageIfNeeded() {
-		if (camera.position.x + camera.viewportHeight >= stage * STAGE_WIDTH * TILE_SIZE) {
+		if (camera.position.x + camera.viewportWidth >= stage * STAGE_WIDTH * TILE_SIZE) {
 			generateStage();
 		}
 	}
