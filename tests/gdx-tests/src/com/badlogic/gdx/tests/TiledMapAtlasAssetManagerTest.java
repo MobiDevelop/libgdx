@@ -26,10 +26,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.tiled.AtlasTmxMapLoader;
-import com.badlogic.gdx.maps.tiled.AtlasTmxMapLoader.AtlasTiledMapLoaderParameters;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.loaders.AtlasTmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.tests.utils.GdxTest;
 import com.badlogic.gdx.tests.utils.OrthoCamController;
@@ -62,7 +61,7 @@ public class TiledMapAtlasAssetManagerTest extends GdxTest {
 		font = new BitmapFont();
 		batch = new SpriteBatch();
 
-		AtlasTiledMapLoaderParameters params = new AtlasTiledMapLoaderParameters();
+		AtlasTmxMapLoader.Parameters params = new AtlasTmxMapLoader.Parameters();
 		params.forceTextureFilters = true;
 		params.textureMinFilter = TextureFilter.Linear;
 		params.textureMagFilter = TextureFilter.Linear;

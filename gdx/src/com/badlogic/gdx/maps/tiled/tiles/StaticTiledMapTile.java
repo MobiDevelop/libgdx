@@ -72,6 +72,10 @@ public class StaticTiledMapTile implements TiledMapTile {
 		return textureRegion;
 	}
 	
+	public void setTextureRegion(TextureRegion textureRegion) {
+		this.textureRegion = textureRegion;
+	}
+	
 	/**
 	 * Creates a static tile with the given region
 	 * 
