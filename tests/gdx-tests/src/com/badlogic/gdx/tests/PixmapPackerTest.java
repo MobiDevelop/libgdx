@@ -25,9 +25,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.PixmapPacker;
-import com.badlogic.gdx.graphics.g2d.PixmapPackerIO;
+//import com.badlogic.gdx.graphics.g2d.PixmapPackerIO;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -37,7 +38,7 @@ import com.badlogic.gdx.tests.utils.GdxTest;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
-import java.io.IOException;
+//import java.io.IOException;
 
 public class PixmapPackerTest extends GdxTest {
 
@@ -54,6 +55,8 @@ public class PixmapPackerTest extends GdxTest {
 	NinePatch officialPatch;
 
 	Skin skin;
+
+	Animation<TextureAtlas.AtlasRegion> animation;
 
 	@Override
 	public void create () {
@@ -96,6 +99,10 @@ public class PixmapPackerTest extends GdxTest {
 			packer.pack("badlogic-whitespace -" + count, pixmap5);
 		}
 
+		packer.pack("badlogic_indexed_01", pixmap1);
+		packer.pack("badlogic_indexed_02", pixmap1);
+		packer.pack("badlogic_indexed_03", pixmap1);
+
 		pixmap1.dispose();
 		pixmap2.dispose();
 		pixmap3.dispose();
@@ -119,24 +126,31 @@ public class PixmapPackerTest extends GdxTest {
 			}
 		});
 
+		Array animationRegions = atlas.findRegions("badlogic_indexed");
+		Gdx.app.log("PixmapPackerTest", "Animation regions: " + animationRegions.size);
+
+		animation = new Animation<TextureAtlas.AtlasRegion>(0.5f, animationRegions, Animation.PlayMode.LOOP);
+
 		ninePatch = atlas.createPatch("textfield-1");
 		officialPatch = skin.getPatch("textfield");
 		officialPatch.getTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 
-		PixmapPackerIO pixmapPackerIO = new PixmapPackerIO();
-		try {
-			PixmapPackerIO.SaveParameters saveParameters = new PixmapPackerIO.SaveParameters();
-			saveParameters.format = PixmapPackerIO.ImageFormat.PNG;
-			pixmapPackerIO.save(Gdx.files.local("pixmapPackerTest.atlas"), packer, saveParameters);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 
-		TextureAtlas loaded = new TextureAtlas(Gdx.files.local("pixmapPackerTest.atlas"));
-		for (int i = 0; i < loaded.getRegions().size; i++) {
-			final TextureAtlas.AtlasRegion atlasRegion = loaded.getRegions().get(i);
-			compare(atlas, atlasRegion);
-		}
+
+//		PixmapPackerIO pixmapPackerIO = new PixmapPackerIO();
+//		try {
+//			PixmapPackerIO.SaveParameters saveParameters = new PixmapPackerIO.SaveParameters();
+//			saveParameters.format = PixmapPackerIO.ImageFormat.PNG;
+//			pixmapPackerIO.save(Gdx.files.local("pixmapPackerTest.atlas"), packer, saveParameters);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//
+//		TextureAtlas loaded = new TextureAtlas(Gdx.files.local("pixmapPackerTest.atlas"));
+//		for (int i = 0; i < loaded.getRegions().size; i++) {
+//			final TextureAtlas.AtlasRegion atlasRegion = loaded.getRegions().get(i);
+//			compare(atlas, atlasRegion);
+//		}
 	}
 
 	private void compare (TextureAtlas original, TextureAtlas.AtlasRegion loaded) {
@@ -166,6 +180,8 @@ public class PixmapPackerTest extends GdxTest {
 			if (originalRegion.pads != loaded.pads) throw new GdxRuntimeException("Original AtlasRegion differs from loaded");
 		}	}
 
+	float stateTime = 0;
+
 	@Override
 	public void render () {
 		Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1);
@@ -176,11 +192,17 @@ public class PixmapPackerTest extends GdxTest {
 		batch.draw(textureRegions.get(pageToShow), 0, 0, size, size);
 		ninePatch.draw(batch, 10, 10, quarterSize, quarterSize);
 		officialPatch.draw(batch, (int)(size * 0.25f + 20), 10, quarterSize, quarterSize);
+
+		TextureRegion tr = (TextureRegion) animation.getKeyFrame(stateTime);
+		batch.draw(tr, 50, 10, quarterSize, quarterSize);
+
 		batch.end();
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 		shapeRenderer.setColor(Color.GREEN);
 		shapeRenderer.rect(0, 0, size, size);
 		shapeRenderer.end();
+
+		stateTime += Gdx.graphics.getDeltaTime();
 	}
 
 	@Override
